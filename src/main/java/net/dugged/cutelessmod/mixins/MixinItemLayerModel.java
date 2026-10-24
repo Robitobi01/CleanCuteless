@@ -23,12 +23,12 @@ import java.util.Optional;
 @SuppressWarnings({"DiscouragedInjectionPoint", "InvalidInjectorMethodSignature", "OptionalUsedAsFieldOrParameterType", "PointlessArithmeticExpression"})
 @Mixin(ItemLayerModel.class)
 public abstract class MixinItemLayerModel {
-	@Shadow
+	@Shadow(remap = false)
 	private static BakedQuad buildQuad(final VertexFormat format, final Optional<TRSRTransformation> transform, final EnumFacing side, final TextureAtlasSprite sprite, final int tint, final float x0, final float y0, final float z0, final float u0, final float v0, final float x1, final float y1, final float z1, final float u1, final float v1, final float x2, final float y2, final float z2, final float u2, final float v2, final float x3, final float y3, final float z3, final float u3, final float v3) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Inject(method = "getQuadsForSprite", at = @At(value = "JUMP", opcode = Opcodes.GOTO, ordinal = 0), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/util/EnumFacing;DOWN:Lnet/minecraft/util/EnumFacing;", opcode = Opcodes.GETSTATIC, ordinal = 0)), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "getQuadsForSprite", remap = false, at = @At(value = "JUMP", opcode = Opcodes.GOTO, ordinal = 0), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/util/EnumFacing;DOWN:Lnet/minecraft/util/EnumFacing;", opcode = Opcodes.GETSTATIC, ordinal = 0)), locals = LocalCapture.CAPTURE_FAILHARD)
 	private static void cutelessmod$fewerDots(final int tint, final TextureAtlasSprite sprite, final VertexFormat format, final Optional<TRSRTransformation> transform, final CallbackInfoReturnable<ImmutableList<BakedQuad>> cir,
 	                                          final ImmutableList.Builder<BakedQuad> builder, final int width, final int height, final @Coerce Object faceData, final boolean translucent, final int f, final int[] pixels, final boolean ptu, final boolean[] ptv, final int v, int u, final int alpha, final boolean t) {
 		if (t || !Configuration.zzzSlightlyBetterItemStitchingMaybeKindaNotReally) {
@@ -73,7 +73,7 @@ public abstract class MixinItemLayerModel {
 
 
 
-	@Inject(method = "getQuadsForSprite", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/model/ItemLayerModel;buildQuad(Lnet/minecraft/client/renderer/vertex/VertexFormat;Ljava/util/Optional;Lnet/minecraft/util/EnumFacing;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IFFFFFFFFFFFFFFFFFFFF)Lnet/minecraft/client/renderer/block/model/BakedQuad;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+	@Inject(method = "getQuadsForSprite", remap = false, at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraftforge/client/model/ItemLayerModel;buildQuad(Lnet/minecraft/client/renderer/vertex/VertexFormat;Ljava/util/Optional;Lnet/minecraft/util/EnumFacing;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IFFFFFFFFFFFFFFFFFFFF)Lnet/minecraft/client/renderer/block/model/BakedQuad;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
 	private static void cutelessmod$doNotDrawTheseWhenStitching(final int tint, final TextureAtlasSprite sprite, final VertexFormat format, final Optional<TRSRTransformation> transform, final CallbackInfoReturnable<ImmutableList<BakedQuad>> cir,
 	                                                            final ImmutableList.Builder<BakedQuad> builder) {
 		if (Configuration.zzzSlightlyBetterItemStitchingMaybeKindaNotReally) {

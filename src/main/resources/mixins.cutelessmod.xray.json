@@ -1,10 +1,13 @@
 {
-	"required": true,
 	"package": "net.dugged.cutelessmod.xray.mixins",
-	"refmap": "mixins.cutelessmod.refmap.json",
-	"minVersion": "0.7.3",
-	"compatibilityLevel": "JAVA_8",
-	"mixins": [
+	"required": true,
+	"refmap": ${mixin_refmap},
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [],
+	"server": [],
+	"client": [
 		"MixinBlock",
 		"MixinBlockRendererDispatcher",
 		"MixinEntityRenderer",

@@ -1,11 +1,14 @@
 {
-	"required": true,
 	"package": "net.dugged.cutelessmod.mixins.nothirium",
-	"refmap": "mixins.cutelessmod.refmap.json",
+	"required": true,
+	"refmap": ${mixin_refmap},
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_25",
 	"plugin": "net.dugged.cutelessmod.mixins.nothirium.CutelessNothiriumLoadingPlugin",
-	"minVersion": "0.7.4",
-	"compatibilityLevel": "JAVA_8",
-	"mixins": [
+	"mixins": [],
+	"server": [],
+	"client": [
 		"MixinEntityRenderer",
 		"MixinMinecraft",
 		"MixinRenderGlobal"

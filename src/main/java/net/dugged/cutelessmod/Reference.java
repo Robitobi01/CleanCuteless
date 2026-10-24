@@ -1,17 +1,8 @@
 package net.dugged.cutelessmod;
 
-import java.util.function.Supplier;
-
 public class Reference {
-	public static final String MODID = "cutelessmod";
-	public static final String NAME = "CutelessMod";
-	public static final String VERSION = "@VERSION@";
-	public static final boolean isForge = ((Supplier<Boolean>) () -> {
-		try {
-			Class.forName("net.minecraftforge.fml.client.FMLClientHandler");
-			return true;
-		} catch (final ClassNotFoundException e) {
-			return false;
-		}
-	}).get();
+	public static final String MODID = Tags.MOD_ID;
+	public static final String NAME = Tags.MOD_NAME;
+	public static final String VERSION = Tags.VERSION;
+	public static final String CLEANROOM_VERSION = Tags.CLEANROOM_VERSION;
 }

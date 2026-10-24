@@ -12,7 +12,6 @@ import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -56,7 +55,7 @@ public abstract class CMixinNoClip {
 	@Mixin(World.class)
 	public abstract static class MixinWorld {
 		@ModifyVariable(method = "mayPlace", at = @At("HEAD"), argsOnly = true)
-		private boolean ignoreEntityWhenPlacing(final boolean skipCollisionCheck, final Block block, final BlockPos pos, final boolean skip, final EnumFacing side, final @Nullable Entity placer) {
+		private boolean ignoreEntityWhenPlacing(final boolean skipCollisionCheck, final Block block, final BlockPos pos, final boolean skip, final EnumFacing side, final Entity placer) {
 			return Configuration.noClip && placer instanceof EntityPlayer && ((EntityPlayer) placer).isCreative() || skipCollisionCheck;
 		}
 	}
