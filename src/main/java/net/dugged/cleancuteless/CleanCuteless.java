@@ -20,7 +20,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemCompass;
 import net.minecraft.network.play.client.CPacketChatMessage;
-import net.minecraft.network.play.client.CPacketClientStatus;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.tileentity.TileEntityChest;
@@ -78,8 +77,6 @@ public class CleanCuteless {
 	public static ServerData currentServer;
 	public static long tickCounter = 0;
 	public static int hotbarSlot = 0;
-	public static String statPluginFilter = "stat.useItem.minecraft.diamond_pickaxe";
-	public static StatPlugin statPlugin = new StatPlugin();
 	public static String lastCommand = "";
 	public static GuiCompass guiCompass = new GuiCompass(mc);
 	public static boolean enableSounds = CleanCuteless.shouldHaveSounds();
@@ -185,12 +182,6 @@ public class CleanCuteless {
 			if (!mc.isIntegratedServerRunning()) {
 				currentServer = mc.getCurrentServerData();
 			}
-			// If connected to OBS request & update stat every 5 mins
-			if (statPlugin.isConnected() && tickCounter > statPlugin.lastTick + 1200) {
-				statPlugin.lastTick = tickCounter;
-				mc.world.sendPacketToServer(new CPacketClientStatus(CPacketClientStatus.State.REQUEST_STATS));
-			}
-
 			if (mspt > 0) {
 				final int tps = Math.min(20, 1000 / mspt);
 				ITextComponent base = new TextComponentString("");

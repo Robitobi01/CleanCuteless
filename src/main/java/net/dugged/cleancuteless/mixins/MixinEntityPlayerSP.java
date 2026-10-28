@@ -2,7 +2,6 @@ package net.dugged.cleancuteless.mixins;
 
 import com.mojang.authlib.GameProfile;
 import net.dugged.cleancuteless.Configuration;
-import net.dugged.cleancuteless.CleanCuteless;
 import net.dugged.cleancuteless.CleanCutelessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -11,7 +10,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.stats.StatBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
@@ -60,15 +58,6 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
 	private void enableElytraCancelation(final CallbackInfo ci) {
 		if (Configuration.elytraCancellation && this.getFlag(7) && GuiScreen.isShiftKeyDown() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			this.setFlag(7, false);
-		}
-	}
-
-	@Inject(method = "addStat", at = @At("HEAD"))
-	private void addStat(StatBase stat, int amount, CallbackInfo ci) {
-		if (stat != null && stat.statId != null && stat.statId.matches(CleanCuteless.statPluginFilter)) {
-			if (CleanCuteless.statPlugin.isConnected()) {
-				CleanCuteless.statPlugin.sendStatIncrease(amount, false);
-			}
 		}
 	}
 
