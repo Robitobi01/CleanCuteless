@@ -1,0 +1,198 @@
+package net.dugged.cleancuteless.clientcommands;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.IClientCommand;
+
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
+
+import static net.minecraft.util.text.TextFormatting.GRAY;
+import static net.minecraft.util.text.TextFormatting.RESET;
+
+public class ClientCommandHandler extends CommandHandler {
+
+	private static final ClientCommandHandler instance = new ClientCommandHandler();
+	private final Minecraft mc = Minecraft.getMinecraft();
+	public PlayerPos lastPlayerPos = new PlayerPos(null, 0);
+	public String[] latestAutoComplete = null;
+	private boolean forgeCommandsRegistered = false;
+
+	public static ClientCommandHandler getInstance() {
+		return instance;
+	}
+
+	public void init() {
+		instance.registerCommand(new CommandPing());
+		instance.registerCommand(new CommandRepeatLast());
+		instance.registerCommand(new CommandStone());
+		instance.registerCommand(new CommandBack());
+		registerForgeCommands();
+	}
+
+	private void registerForgeCommands() {
+		if (forgeCommandsRegistered) {
+			return;
+		}
+		forgeCommandsRegistered = true;
+
+		final Set<ICommand> uniqueCommands = Collections.newSetFromMap(new IdentityHashMap<>());
+		for (final ICommand command : getCommands().values()) {
+			if (command == null || !uniqueCommands.add(command)) {
+				continue;
+			}
+			final net.minecraftforge.client.ClientCommandHandler forgeHandler =
+					net.minecraftforge.client.ClientCommandHandler.instance;
+			if (forgeHandler.getCommands().containsKey(command.getName())) {
+				continue;
+			}
+			forgeHandler.registerCommand(new ForgeCommandBridge(this, command));
+		}
+	}
+
+	@Override
+	public int executeCommand(ICommandSender sender, String message) {
+		message = message.trim();
+
+		if (message.startsWith("/")) {
+			message = message.substring(1);
+		} else {
+			return 0;
+		}
+
+		final String[] temp = message.split(" ");
+		final String[] args = new String[temp.length - 1];
+		final String commandName = temp[0];
+		System.arraycopy(temp, 1, args, 0, args.length);
+		final ICommand command = getCommands().get(commandName);
+		return executeClientCommand(sender, command, args, message);
+	}
+
+	private int executeClientCommand(ICommandSender sender, ICommand command, String[] args, String input) {
+		if (command instanceof ClientCommand && ((ClientCommand) command).creativeOnly && !(
+				mc.player.isCreative() || mc.player.isSpectator())) {
+			final TextComponentTranslation error = new TextComponentTranslation(
+					"text.cutelessmod.clientcommands.wrongGamemode");
+			error.getStyle().setColor(TextFormatting.RED);
+			sender.sendMessage(error);
+			return -1;
+		}
+		if (command == null) {
+			return 0;
+		}
+
+		try {
+			this.tryExecute(sender, args, command, input);
+		} catch (Throwable t) {
+			final TextComponentTranslation error = new TextComponentTranslation(
+					"commands.generic.exception");
+			error.getStyle().setColor(TextFormatting.RED);
+			sender.sendMessage(error);
+		}
+		return -1;
+	}
+
+	private static final class ForgeCommandBridge extends CommandBase implements IClientCommand {
+		private final ClientCommandHandler owner;
+		private final ICommand delegate;
+
+		private ForgeCommandBridge(ClientCommandHandler owner, ICommand delegate) {
+			this.owner = owner;
+			this.delegate = delegate;
+		}
+
+		@Override
+		public String getName() {
+			return delegate.getName();
+		}
+
+		@Override
+		public String getUsage(ICommandSender sender) {
+			return delegate.getUsage(sender);
+		}
+
+		@Override
+		public List<String> getAliases() {
+			return delegate.getAliases();
+		}
+
+		@Override
+		public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+			owner.executeClientCommand(sender, delegate, args, delegate.getName());
+		}
+
+		@Override
+		public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+			return true;
+		}
+
+		@Override
+		public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+											  BlockPos pos) {
+			return delegate.getTabCompletions(server, sender, args, pos);
+		}
+
+		@Override
+		public boolean isUsernameIndex(String[] args, int index) {
+			return delegate.isUsernameIndex(args, index);
+		}
+
+		@Override
+		public boolean allowUsageWithoutPrefix(ICommandSender sender, String message) {
+			return false;
+		}
+	}
+
+	public void autoComplete(String leftOfCursor) {
+		this.latestAutoComplete = null;
+		if (leftOfCursor.charAt(0) == '/') {
+			leftOfCursor = leftOfCursor.substring(1);
+			if (mc.currentScreen instanceof GuiChat) {
+				final List<String> commands = this.getTabCompletions(mc.player, leftOfCursor,
+						mc.player.getPosition());
+				if (!commands.isEmpty()) {
+					if (leftOfCursor.indexOf(' ') == -1) {
+						IntStream.range(0, commands.size())
+								.forEach(s -> commands.set(s, GRAY + "/" + commands.get(s) + RESET));
+					} else {
+						IntStream.range(0, commands.size())
+								.forEach(s -> commands.set(s, GRAY + commands.get(s) + RESET));
+					}
+					this.latestAutoComplete = commands.toArray(new String[0]);
+				}
+			}
+		}
+	}
+
+	@Override
+	protected MinecraftServer getServer() {
+		return mc.getIntegratedServer();
+	}
+
+	public static class PlayerPos {
+
+		public BlockPos position;
+		public int dimension;
+
+		PlayerPos(BlockPos pos, int dim) {
+			update(pos, dim);
+		}
+
+		public void update(BlockPos pos, int dim) {
+			dimension = dim;
+			position = pos;
+		}
+	}
+}

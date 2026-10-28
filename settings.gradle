@@ -8,3 +8,5 @@ pluginManagement {
 plugins {
     id 'com.cleanroommc.cleanroomgradle.settings' version '0.22.1'
 }
+
+rootProject.name = 'CleanCuteless'

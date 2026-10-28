@@ -1,0 +1,16 @@
+{
+	"package": "net.dugged.cleancuteless.clientcommands.mixins",
+	"required": true,
+	"refmap": ${mixin_refmap},
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [],
+	"server": [],
+	"client": [
+		"MixinGuiScreen",
+		"MixinNetHandlerPlayClient",
+		"MixinPlayerMenuObject",
+		"MixinTabCompleter"
+	]
+}

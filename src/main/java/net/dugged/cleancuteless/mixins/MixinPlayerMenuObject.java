@@ -1,0 +1,46 @@
+package net.dugged.cleancuteless.mixins;
+
+import com.mojang.authlib.GameProfile;
+import net.dugged.cleancuteless.CleanCuteless;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.spectator.PlayerMenuObject;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketChatMessage;
+import net.minecraft.network.play.client.CPacketSpectate;
+import net.minecraft.util.ResourceLocation;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+@Mixin(PlayerMenuObject.class)
+public abstract class MixinPlayerMenuObject {
+	@Shadow
+	@Final
+	private GameProfile profile;
+
+	@Redirect(method = "renderIcon", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V"))
+	private void redirectbindTexture(TextureManager textureManager, ResourceLocation resource) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		final NetworkPlayerInfo npi = mc.player.connection.getPlayerInfo(this.profile.getName());
+		if (npi != null) {
+			mc.getTextureManager().bindTexture(npi.getLocationSkin());
+		}
+	}
+
+	@Redirect(method = "selectItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/NetHandlerPlayClient;sendPacket(Lnet/minecraft/network/Packet;)V"))
+	private void teleportCompassMenu(NetHandlerPlayClient netHandlerPlayClient, Packet<?> packetIn) {
+		NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
+		if (CleanCuteless.guiCompass.isMenuActive()) {
+			connection.sendPacket(new CPacketChatMessage("/gamemode spectator"));
+			connection.sendPacket(new CPacketSpectate(this.profile.getId()));
+			connection.sendPacket(new CPacketChatMessage("/gamemode creative"));
+		} else {
+			connection.sendPacket(new CPacketSpectate(this.profile.getId()));
+		}
+	}
+}

@@ -1,0 +1,17 @@
+package net.dugged.cleancuteless.mixins;
+
+import net.minecraft.client.gui.ServerListEntryNormal;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
+import java.util.concurrent.ThreadPoolExecutor;
+
+@Mixin(ServerListEntryNormal.class)
+public interface IServerListEntryNormal {
+	@Mutable
+	@Accessor("EXECUTOR")
+	static ThreadPoolExecutor getExecutor() {
+		throw new UnsupportedOperationException();
+	}
+}

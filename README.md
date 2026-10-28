@@ -1,4 +1,4 @@
-# Cuteless Mod
+# CleanCuteless
 
 Minecraft 1.12.2 · Cleanroom 0.7.12-alpha · Java 25 · Gradle 9.8.1
 
@@ -25,6 +25,6 @@ carpet client used for carpet servers. **Minimap currently not working**
 | /repeatlast | -          | Repeats the last send command, alias /; theres also an additional hotkey            |
 | /stone      | -          | Places a stone at the current location                                              |
 
-Settings: `gradle.properties`. Install `build/libs/cutelessmod-<version>.jar`.
+Settings: `gradle.properties`. Install `build/libs/cleancuteless-<version>.jar`.
 
 License: MIT.

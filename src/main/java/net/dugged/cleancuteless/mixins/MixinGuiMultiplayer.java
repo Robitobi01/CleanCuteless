@@ -1,0 +1,61 @@
+package net.dugged.cleancuteless.mixins;
+
+import net.dugged.cleancuteless.Configuration;
+import net.dugged.cleancuteless.CleanCuteless;
+import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.ServerListEntryNormal;
+import net.minecraft.client.gui.ServerSelectionList;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.client.network.ServerPinger;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(GuiMultiplayer.class)
+public abstract class MixinGuiMultiplayer {
+	@Shadow
+	@Final
+	private ServerPinger oldServerPinger;
+	@Shadow
+	private ServerList savedServerList;
+	@Shadow
+	private ServerSelectionList serverListSelector;
+	@Unique
+	private int cleancutelessTick = 0;
+
+	@Inject(method = "updateScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerPinger;pingPendingNetworks()V"))
+	private void dynamicListUpdates(final CallbackInfo ci) {
+		if (Configuration.dynamicServerListUpdates) {
+			try {
+				final int visibleSlots = (this.serverListSelector.bottom - this.serverListSelector.top) / this.serverListSelector.getSlotHeight();
+				final int startIndex = this.serverListSelector.getAmountScrolled() / this.serverListSelector.getSlotHeight();
+				if (++cleancutelessTick >= 300) {
+					cleancutelessTick = 0;
+					for (int i = startIndex; i <= visibleSlots; i++) {
+						if (serverListSelector.getListEntry(i) instanceof ServerListEntryNormal && ((ServerListEntryNormal) this.serverListSelector.getListEntry(i)).getServerData().pinged) {
+							final int j = i;
+							IServerListEntryNormal.getExecutor().execute(() -> {
+								try {
+									this.oldServerPinger.ping(this.savedServerList.getServerData(j));
+								} catch (Exception ignored) {
+								}
+							});
+						}
+					}
+					this.serverListSelector.updateOnlineServers(this.savedServerList);
+				}
+			} catch (Exception ignored) {
+			}
+		}
+	}
+
+	@Inject(method = "connectToServer", at = @At(value = "HEAD"))
+	private void updateServerData(final ServerData data, final CallbackInfo ci) {
+		CleanCuteless.currentServer = data;
+	}
+}
