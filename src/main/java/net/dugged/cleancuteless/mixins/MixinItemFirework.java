@@ -20,7 +20,7 @@ public abstract class MixinItemFirework extends Item {
 		if (playerIn.getCooldownTracker().hasCooldown(this)) {
 			cir.cancel();
 		}
-		if (Configuration.rocketCooldown && playerIn.isElytraFlying()) {
+		if (Configuration.player.enforceRocketCooldown && playerIn.isElytraFlying()) {
 			playerIn.getCooldownTracker().setCooldown(this, 15);
 		}
 	}

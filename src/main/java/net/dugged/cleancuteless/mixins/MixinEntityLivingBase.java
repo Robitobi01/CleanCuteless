@@ -47,7 +47,7 @@ public abstract class MixinEntityLivingBase extends Entity {
 
 	@Redirect(method = "onDeathUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnParticle(Lnet/minecraft/util/EnumParticleTypes;DDDDDD[I)V"))
 	private void cleancleancuteless$onSummonDeathParticles(final World instance, final EnumParticleTypes particleType, final double xCoord, final double yCoord, final double zCoord, final double xSpeed, final double ySpeed, final double zSpeed, final int[] parameters) {
-		if (Configuration.showDeathParticles) {
+		if (Configuration.visuals.showDeathParticles) {
 			instance.spawnParticle(particleType, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);
 		}
 	}

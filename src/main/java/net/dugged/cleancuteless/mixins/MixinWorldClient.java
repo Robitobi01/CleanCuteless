@@ -24,19 +24,19 @@ public abstract class MixinWorldClient extends World {
 
 	@Override
 	public void updateEntity(final Entity entity) {
-		if (Configuration.clientEntityUpdates || entity instanceof EntityPlayer || entity instanceof EntityFireworkRocket) {
+		if (Configuration.player.updateClientEntities || entity instanceof EntityPlayer || entity instanceof EntityFireworkRocket) {
 			super.updateEntity(entity);
 		}
 	}
 
 	@Override
 	public float getRainStrength(final float delta) {
-		return Configuration.showRain ? this.prevRainingStrength + (this.rainingStrength - this.prevRainingStrength) * delta : 0F;
+		return Configuration.visuals.showRain ? this.prevRainingStrength + (this.rainingStrength - this.prevRainingStrength) * delta : 0F;
 	}
 
 	@Inject(method = "playMoodSoundAndCheckLight", at = @At("HEAD"), cancellable = true)
 	private void cleancleancuteless$disableMoodSoundAndCheckLight(final int x, final int z, final Chunk chunkIn, final CallbackInfo ci) {
-		if (Configuration.disableMoodSoundAndCheckLight) {
+		if (Configuration.rendering.disableCaveAmbience) {
 			ci.cancel();
 		}
 	}

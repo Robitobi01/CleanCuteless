@@ -22,10 +22,10 @@ public abstract class MixinRenderItemFrame {
 
 	@Inject(method = "doRender", at = @At("HEAD"), cancellable = true)
 	private void onDoRender(EntityItemFrame entity, double x, double y, double z, float yaw, float partialTicks, CallbackInfo ci) {
-		if (Configuration.performanceImprovements && !Minecraft.getMinecraft().player.canEntityBeSeen(entity)) {
+		if (Configuration.rendering.cullHiddenItemFrames && !Minecraft.getMinecraft().player.canEntityBeSeen(entity)) {
 			ci.cancel();
 		}
-		if (entity.facingDirection != null && !Configuration.showItemFrameFrame) {
+		if (entity.facingDirection != null && !Configuration.visuals.showItemFrameBorder) {
 			ci.cancel();
 			final BlockPos blockpos = entity.getHangingPosition();
 			final double dX = (double) blockpos.getX() - entity.posX + x + 0.5D;

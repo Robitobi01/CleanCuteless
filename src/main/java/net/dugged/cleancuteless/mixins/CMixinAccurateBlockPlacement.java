@@ -26,7 +26,7 @@ public abstract class CMixinAccurateBlockPlacement {
 	public abstract static class MixinPlayerControllerMP {
 		@ModifyArg(method = "processRightClickBlock", index = 3, at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/client/CPacketPlayerTryUseItemOnBlock;<init>(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;Lnet/minecraft/util/EnumHand;FFF)V"))
 		public float sendPacketReplace(final BlockPos pos, final EnumFacing face, final EnumHand hand, final float fX, final float fY, final float fZ) {
-			return Configuration.carpetAccurateBlockPlacement ? cleancleancuteless$encodeBlockRotation(pos, face, hand, fX) : fX;
+			return Configuration.network.carpetAccuratePlacement ? cleancleancuteless$encodeBlockRotation(pos, face, hand, fX) : fX;
 		}
 
 		/**

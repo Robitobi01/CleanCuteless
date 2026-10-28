@@ -27,12 +27,12 @@ import java.util.List;
 public abstract class MixinGuiChat {
 	@ModifyConstant(method = "initGui", constant = @Constant(intValue = 256))
 	private int increaseLimit(final int orig) {
-		return Configuration.extendedChat ? 2048 : orig;
+		return Configuration.ui.extendedChat ? 2048 : orig;
 	}
 
 	@Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
 	private void cleancleancuteless$clickToCopyChat(final int mouseX, final int mouseY, final int mouseButton, final CallbackInfo ci) {
-		if (!Configuration.clickToCopyChat) {
+		if (!Configuration.ui.copyChatOnClick) {
 			return;
 		}
 

@@ -30,7 +30,7 @@ public abstract class MixinGuiMultiplayer {
 
 	@Inject(method = "updateScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerPinger;pingPendingNetworks()V"))
 	private void dynamicListUpdates(final CallbackInfo ci) {
-		if (Configuration.dynamicServerListUpdates) {
+		if (Configuration.network.refreshServerListPings) {
 			try {
 				final int visibleSlots = (this.serverListSelector.bottom - this.serverListSelector.top) / this.serverListSelector.getSlotHeight();
 				final int startIndex = this.serverListSelector.getAmountScrolled() / this.serverListSelector.getSlotHeight();

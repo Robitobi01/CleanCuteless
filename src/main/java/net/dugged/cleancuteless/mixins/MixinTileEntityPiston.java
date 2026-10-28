@@ -17,7 +17,7 @@ public abstract class MixinTileEntityPiston extends TileEntity {
 
 	@Inject(method = "getProgress", at = @At("HEAD"), cancellable = true)
 	public void getSmoothProgress(final float partialTicks, final CallbackInfoReturnable<Float> cir) {
-		if (Configuration.smootherPistons) {
+		if (Configuration.building.smoothPistons) {
 			cir.setReturnValue(Math.min(1F, (2F * this.cuteful$progress + partialTicks) / 3F));
 		}
 	}
@@ -29,7 +29,7 @@ public abstract class MixinTileEntityPiston extends TileEntity {
 
 	@Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;removeTileEntity(Lnet/minecraft/util/math/BlockPos;)V"), cancellable = true)
 	private void mc54546(final CallbackInfo ci) {
-		if (Configuration.smootherPistons && this.world.isRemote) {
+		if (Configuration.building.smoothPistons && this.world.isRemote) {
 			ci.cancel();
 		}
 	}

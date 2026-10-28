@@ -27,7 +27,7 @@ public abstract class MixinBlock {
 
 	@Inject(method = "getOffset", at = @At("HEAD"), cancellable = true)
 	private void onGetOffset(final IBlockState state, final IBlockAccess world, final BlockPos pos, final CallbackInfoReturnable<Vec3d> cir) {
-		if (Configuration.showCenteredPlants) {
+		if (Configuration.visuals.showCenteredPlants) {
 			cir.setReturnValue(Vec3d.ZERO);
 		}
 	}

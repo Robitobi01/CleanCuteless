@@ -29,7 +29,7 @@ public abstract class MixinEntity {
 
 	@Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onEntityWalk(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)V", shift = At.Shift.AFTER))
 	private void addParticles(MoverType d0, double l4, double d12, double i5, CallbackInfo ci) {
-		if (!Configuration.showSnowDripParticles) {
+		if (!Configuration.visuals.showSnowDripParticles) {
 			return;
 		}
 		if (world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY), MathHelper.floor(this.posZ))).getBlock() instanceof BlockSnow) {

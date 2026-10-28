@@ -13,7 +13,7 @@ public abstract class MixinItemRenderer {
 
 	@Redirect(method = "updateEquippedItem()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;getCooledAttackStrength(F)F"))
 	private float disableItemSwapAnimation(EntityPlayerSP playerSP, float adjustTicks) {
-		if (!Configuration.showHandChangeAnimation) {
+		if (!Configuration.visuals.showHandChangeAnimation) {
 			return 1.0F;
 		} else {
 			return playerSP.getCooledAttackStrength(adjustTicks);

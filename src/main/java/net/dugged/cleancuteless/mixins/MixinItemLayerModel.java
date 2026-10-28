@@ -31,7 +31,7 @@ public abstract class MixinItemLayerModel {
 	@Inject(method = "getQuadsForSprite", remap = false, at = @At(value = "JUMP", opcode = Opcodes.GOTO, ordinal = 0), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/util/EnumFacing;DOWN:Lnet/minecraft/util/EnumFacing;", opcode = Opcodes.GETSTATIC, ordinal = 0)), locals = LocalCapture.CAPTURE_FAILHARD)
 	private static void cleancleancuteless$fewerDots(final int tint, final TextureAtlasSprite sprite, final VertexFormat format, final Optional<TRSRTransformation> transform, final CallbackInfoReturnable<ImmutableList<BakedQuad>> cir,
 	                                          final ImmutableList.Builder<BakedQuad> builder, final int width, final int height, final @Coerce Object faceData, final boolean translucent, final int f, final int[] pixels, final boolean ptu, final boolean[] ptv, final int v, int u, final int alpha, final boolean t) {
-		if (t || !Configuration.zzzSlightlyBetterItemStitchingMaybeKindaNotReally) {
+		if (t || !Configuration.fixes.fixItemStitchingSeams) {
 			return;
 		}
 
@@ -76,7 +76,7 @@ public abstract class MixinItemLayerModel {
 	@Inject(method = "getQuadsForSprite", remap = false, at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraftforge/client/model/ItemLayerModel;buildQuad(Lnet/minecraft/client/renderer/vertex/VertexFormat;Ljava/util/Optional;Lnet/minecraft/util/EnumFacing;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IFFFFFFFFFFFFFFFFFFFF)Lnet/minecraft/client/renderer/block/model/BakedQuad;", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
 	private static void cleancleancuteless$doNotDrawTheseWhenStitching(final int tint, final TextureAtlasSprite sprite, final VertexFormat format, final Optional<TRSRTransformation> transform, final CallbackInfoReturnable<ImmutableList<BakedQuad>> cir,
 	                                                            final ImmutableList.Builder<BakedQuad> builder) {
-		if (Configuration.zzzSlightlyBetterItemStitchingMaybeKindaNotReally) {
+		if (Configuration.fixes.fixItemStitchingSeams) {
 			cir.setReturnValue(builder.build());
 		}
 	}

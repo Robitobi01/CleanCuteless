@@ -37,7 +37,7 @@ public abstract class MixinBlockPistonBase extends BlockDirectional {
 
 	@Inject(method = "checkForMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addBlockEvent(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;II)V", ordinal = 1, shift = At.Shift.BEFORE))
 	private void mc88959(final World world, final BlockPos pos, final IBlockState state, final CallbackInfo ci) {
-		if (Configuration.instantDoubleRetraction) {
+		if (Configuration.building.instantPistonDoubleRetraction) {
 			world.setBlockState(pos, state.withProperty(EXTENDED, false), 2);
 		}
 	}
@@ -47,14 +47,14 @@ public abstract class MixinBlockPistonBase extends BlockDirectional {
 
 	@Inject(method = "eventReceived", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockPistonBase;doMove(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;Z)Z", ordinal = 1))
 	private void stickyBlockRetraction(final IBlockState state, final World world, final BlockPos pos, final int retracting, final int meta, final CallbackInfoReturnable<Boolean> cir) {
-		if (Configuration.smootherPistons && world.isRemote) {
+		if (Configuration.building.smoothPistons && world.isRemote) {
 			MixinBlockPistonBase.shouldKeepPistonHead = true;
 		}
 	}
 
 	@Inject(method = "eventReceived", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockPistonBase;doMove(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;Z)Z", ordinal = 1, shift = Shift.BY, by = 3), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void stickyEmptyRetraction(final IBlockState state, final World world, final BlockPos pos, final int retracting, final int meta, final CallbackInfoReturnable<Boolean> cir, final EnumFacing facing) {
-		if (Configuration.smootherPistons && world.isRemote) {
+		if (Configuration.building.smoothPistons && world.isRemote) {
 			if (!MixinBlockPistonBase.shouldKeepPistonHead) {
 				world.setBlockToAir(pos.offset(facing));
 			}
@@ -65,7 +65,7 @@ public abstract class MixinBlockPistonBase extends BlockDirectional {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!Configuration.showPistonOrder) return false;
+		if (!Configuration.building.showPistonOrder) return false;
 		boolean flag = playerIn.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.AIR;
 		if (worldIn.isRemote && flag) {
 			boolean extending = !(Boolean) state.getValue(BlockPistonBase.EXTENDED);

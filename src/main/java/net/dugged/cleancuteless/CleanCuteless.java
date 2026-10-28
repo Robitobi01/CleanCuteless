@@ -93,6 +93,7 @@ public class CleanCuteless {
 	@Mod.EventHandler
 	public void preInit(final FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
+		ConfigCleanup.prune(Reference.MODID);
 		this.originalTitle = Display.getTitle();
 		updateTitle();
 	}
@@ -102,21 +103,19 @@ public class CleanCuteless {
 		KeyBindings.init();
 		ClientCommandHandler.getInstance().init();
 		GuiChunkGrid.instance = new GuiChunkGrid();
-		if (Configuration.chestWithoutTESR) {
+		if (Configuration.rendering.renderChestsWithBlockModels) {
 			TileEntityRendererDispatcher.instance.renderers.remove(TileEntityChest.class);
 		}
 
-		try {
-			GuiIngameForge.renderObjective = Configuration.class.getField("showScoreboards").getBoolean(Configuration.class);
-		} catch (NoSuchFieldException | IllegalAccessException ignored) {
-			// noop
-		}
+		GuiIngameForge.renderObjective = Configuration.ui.showScoreboard;
 	}
 
 	@SubscribeEvent
 	public void onConfigChangedEvent(final ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (event.getModID().equals(Reference.MODID)) {
 			ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
+			ConfigCleanup.prune(Reference.MODID);
+			GuiIngameForge.renderObjective = Configuration.ui.showScoreboard;
 		}
 	}
 
@@ -139,7 +138,7 @@ public class CleanCuteless {
 		 also need to emulate those presses to mitigate this side effect of
 		 the fix.
 		*/
-		if (Configuration.weirdShift2Shift6LinuxBug) {
+		if (Configuration.fixes.fixLinuxShiftNumberKeys) {
 			switch (Keyboard.getEventKey()) {
 				case Keyboard.KEY_CIRCUMFLEX: // Shift-6
 					KeyBinding.onTick(Keyboard.KEY_6);
@@ -237,11 +236,11 @@ public class CleanCuteless {
 		}
 
 		stepAssistHelper.update(player);
-		if (Configuration.noFall && player.fallDistance > 2F && !player.isElytraFlying()) {
+		if (Configuration.player.noFall && player.fallDistance > 2F && !player.isElytraFlying()) {
 			player.connection.sendPacket(new CPacketPlayer(true));
 		}
 
-		if (Configuration.flightInertiaCancellation && player.capabilities.isFlying) {
+		if (Configuration.player.cancelFlightInertia && player.capabilities.isFlying) {
 			final GameSettings settings = mc.gameSettings;
 			if (!(GameSettings.isKeyDown(settings.keyBindForward) || GameSettings.isKeyDown(settings.keyBindBack) || GameSettings.isKeyDown(settings.keyBindLeft) || GameSettings.isKeyDown(settings.keyBindRight))) {
 				player.motionX = player.motionZ = 0D;
@@ -251,7 +250,7 @@ public class CleanCuteless {
 
 	@SubscribeEvent
 	public void onLeftClickEmpty(final PlayerInteractEvent.LeftClickEmpty event) {
-		if (Configuration.worldEditCompass && mc.world != null && mc.player.isCreative() && mc.player.getHeldItemMainhand().getItem() instanceof ItemCompass) {
+		if (Configuration.building.worldEditCompass && mc.world != null && mc.player.isCreative() && mc.player.getHeldItemMainhand().getItem() instanceof ItemCompass) {
 			boolean teleported = false;
 			boolean stopInAir = GuiScreen.isShiftKeyDown();
 			int distance = stopInAir ? 50 : 500;
@@ -311,7 +310,7 @@ public class CleanCuteless {
 	@SubscribeEvent
 	public void onRightClickEmpty(final PlayerInteractEvent.RightClickEmpty event) {
 		Item itemInHand = mc.player.getHeldItemMainhand().getItem();
-		if (Configuration.worldEditCompass && mc.world != null && mc.player.isCreative() && itemInHand instanceof ItemCompass && guiCompass != null) {
+		if (Configuration.building.worldEditCompass && mc.world != null && mc.player.isCreative() && itemInHand instanceof ItemCompass && guiCompass != null) {
 			if (guiCompass.isMenuActive()) {
 				guiCompass.exit();
 			} else {
@@ -343,7 +342,7 @@ public class CleanCuteless {
 
 	@SubscribeEvent
 	public void showWorldFog(final EntityViewRenderEvent.RenderFogEvent event) {
-		if (!Configuration.showWorldFog) {
+		if (!Configuration.visuals.showWorldFog) {
 			final float renderDistance = 16F * Minecraft.getMinecraft().gameSettings.renderDistanceChunks;
 			GlStateManager.setFogStart(renderDistance * 511F);
 			GlStateManager.setFogEnd(renderDistance * 512F);

@@ -24,7 +24,7 @@ public abstract class MixinParticleFirework_Spark extends Particle {
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void rainbowFireworksTrail(World world, double x, double y, double z, double dx, double dy, double dz, ParticleManager manager, CallbackInfo ci) {
-		if (Configuration.colouredFireworksTrail) {
+		if (Configuration.visuals.colorfulFireworkTrails) {
 			this.particleRed = cleancutelessRNG.nextFloat();
 			this.particleGreen = cleancutelessRNG.nextFloat();
 			this.particleBlue = cleancutelessRNG.nextFloat();

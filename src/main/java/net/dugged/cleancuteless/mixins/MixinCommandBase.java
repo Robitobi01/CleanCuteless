@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinCommandBase {
 	@Inject(method = "checkPermission", at = @At("HEAD"), cancellable = true)
 	private void alwaysAllowCommands(final CallbackInfoReturnable<Boolean> cir) {
-		if (Configuration.alwaysSingleplayerCheats) {
+		if (Configuration.general.singleplayerCheats) {
 			cir.setReturnValue(true);
 		}
 	}

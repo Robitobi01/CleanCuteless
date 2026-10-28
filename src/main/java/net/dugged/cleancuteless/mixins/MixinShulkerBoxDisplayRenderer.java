@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinShulkerBoxDisplayRenderer extends Gui {
 	@Inject(method = "renderToolTip", at = @At("RETURN"))
 	private void postRenderToolTip(final ItemStack stack, final int x, final int y, final CallbackInfo ci) {
-		if (Configuration.showShulkerBoxDisplay) {
+		if (Configuration.visuals.showShulkerContents) {
 			ShulkerBoxDisplay.handleShulkerBoxDisplayRenderer(stack, x, y, this);
 			MapDisplay.handleMapDisplayRenderer(stack, x, y, this);
 		}

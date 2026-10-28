@@ -30,7 +30,7 @@ public abstract class MixinParticleDigging extends Particle {
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void removeRandomParticleMotion(CallbackInfo ci) {
-		final double multiplier = Configuration.blockBreakingMultiplier;
+		final double multiplier = Configuration.visuals.blockBreakParticleScale;
 		if (Math.abs(multiplier - 1D) >= 1E-1D) {
 			this.motionX *= multiplier;
 			this.motionY *= multiplier;
@@ -39,7 +39,7 @@ public abstract class MixinParticleDigging extends Particle {
 			this.particleGravity = 0F;
 		}
 
-		if (Configuration.fixBlock36Particles && this.sourceState.getBlock() == Blocks.PISTON_EXTENSION) {
+		if (Configuration.fixes.fixPistonBreakParticles && this.sourceState.getBlock() == Blocks.PISTON_EXTENSION) {
 			final TileEntity te = this.world.getTileEntity(new BlockPos(this.posX, this.posY, this.posZ));
 			final BlockModelShapes bms = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
 			if (te instanceof TileEntityPiston) {

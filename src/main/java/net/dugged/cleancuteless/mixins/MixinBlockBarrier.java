@@ -21,17 +21,17 @@ public abstract class MixinBlockBarrier extends Block {
 
 	@Override
 	public EnumBlockRenderType getRenderType(final IBlockState state) {
-		return Configuration.showBarrierBlocks ? super.getRenderType(state) : EnumBlockRenderType.INVISIBLE;
+		return Configuration.visuals.showBarrierBlocks ? super.getRenderType(state) : EnumBlockRenderType.INVISIBLE;
 	}
 
 	@Override
 	public BlockRenderLayer getRenderLayer() {
-		return Configuration.showBarrierBlocks ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
+		return Configuration.visuals.showBarrierBlocks ? BlockRenderLayer.TRANSLUCENT : super.getRenderLayer();
 	}
 
 	@Override
 	public boolean shouldSideBeRendered(final IBlockState state, final IBlockAccess world, final BlockPos pos, final EnumFacing side) {
-		if (!Configuration.showBarrierBlocks) {
+		if (!Configuration.visuals.showBarrierBlocks) {
 			return super.shouldSideBeRendered(state, world, pos, side);
 		}
 

@@ -18,7 +18,7 @@ public abstract class MixinInventoryEffectRenderer extends GuiContainer {
 
 	@Inject(method = "updateActivePotionEffects", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/InventoryEffectRenderer;guiLeft:I", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
 	private void noPotionShift(CallbackInfo ci) {
-		if (!Configuration.showPotionShift) {
+		if (!Configuration.visuals.showPotionShift) {
 			this.guiLeft = (this.width - this.xSize) / 2;
 		}
 	}

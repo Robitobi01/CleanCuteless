@@ -17,7 +17,7 @@ public abstract class MixinSpectatorMenu {
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onlyShowPlayers(final ISpectatorMenuRecipient menu, final CallbackInfo ci) {
-		if (!Configuration.showSpectatorTeamMenu) {
+		if (!Configuration.visuals.showSpectatorTeamMenu) {
 			this.getItem(0).selectItem((SpectatorMenu) (Object) this);
 		}
 	}

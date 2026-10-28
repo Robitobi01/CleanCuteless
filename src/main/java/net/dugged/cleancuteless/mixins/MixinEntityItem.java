@@ -26,7 +26,7 @@ public abstract class MixinEntityItem extends Entity {
 
 	@Redirect(method = "onUpdate", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
 	private boolean clientPushOutOfBlocks(final World world) {
-		return !Configuration.smoothItemMovement && !Minecraft.getMinecraft().isSingleplayer();
+		return !Configuration.player.smoothItemMovement && !Minecraft.getMinecraft().isSingleplayer();
 	}
 
 	@Inject(method = "onUpdate", at = @At(value = "HEAD"))

@@ -2,102 +2,158 @@ package net.dugged.cleancuteless;
 
 import net.minecraftforge.common.config.Config;
 
-// Keep the historical config filename so existing installations retain their settings.
-@Config(modid = Reference.MODID, name = "cutelessmod")
-public class Configuration {
-	// Booleans
-	public static boolean alwaysDay = false;
-	public static boolean alwaysPickBlockMaxStack = false;
-	public static boolean alwaysRenderTileEntities = false;
-	public static boolean alwaysShowPing = false;
-	public static boolean alwaysSingleplayerCheats = false;
-	public static boolean autoGenKeybinds = false;
-	public static boolean carpetAccurateBlockPlacement = false;
-	@Config.RequiresMcRestart
-	public static boolean chestWithoutTESR = false;
-	public static boolean clickBlockMining = false;
-	public static boolean clientEntityUpdates = true;
-	public static boolean clickToCopyChat = false;
-	public static boolean colouredFireworksTrail = false;
-	public static boolean craftingHax = true;
-	public static boolean deathLocation = false;
-	public static boolean derpyChicken = false;
-	public static boolean disableMoodSoundAndCheckLight = false;
-	public static boolean disableRealmsButton = false;
-	public static boolean dynamicServerListUpdates = false;
-	public static boolean elytraFix = false;
-	public static boolean elytraCancellation = false;
-	public static boolean extendedChat = false;
-	public static boolean extendedCreativeHotbar = false;
-	public static boolean fixBlock36Particles = false;
-	public static boolean flightInertiaCancellation = false;
-	public static boolean ignoreBlockEvents = false;
-	public static boolean ignoreAirHotbarSnapshots = false;
-	public static boolean improveObserverFire = false;
-	public static boolean instantDoubleRetraction = false;
-	public static boolean jumpBoostStepAssist = false;
-	public static boolean lightUpdates = true;
-	public static boolean lockYaw = false;
-	public static boolean miningGhostBlockFix = false;
-	public static boolean noClip = false;
-	public static boolean noFall = false;
-	public static boolean performanceImprovements = false;
-	public static boolean respawnOnDeath = false;
-	public static boolean rocketCooldown = false;
-	public static boolean showArmor = true;
-	@Config.RequiresMcRestart
-	public static boolean showBarrierBlocks = false;
-	public static boolean showBlockBreakingParticles = true;
-	public static boolean showBlockSelectorUnderwater = false;
-	public static boolean showCenteredPlants = false;
-	public static boolean showClearLava = false;
-	public static boolean showDamageTilt = false;
-	public static boolean showDeathAnimations = true;
-	public static boolean showDeathParticles = true;
-	public static boolean showGuiBackGround = true;
-	public static boolean showHand = true;
-	public static boolean showIdealToolMarker = false;
-	public static boolean showItemAttributes = true;
-	public static boolean showItemFrameFrame = true;
-	public static boolean showHandChangeAnimation = true;
-	public static boolean showMoreEndPortalFaces = false;
-	public static boolean showOneBossBar = false;
-	public static boolean showPistonOrder = false;
-	public static boolean showPotionShift = true;
-	public static boolean showRain = true;
-	public static boolean showRainbowLeaves = false;
-	public static boolean showRandomTextures = true;
-	@SuppressWarnings("unused")
-	public static boolean showScoreboards = true;
-	public static boolean showServerNames = true;
-	public static boolean showShulkerBoxDisplay = false;
-	public static boolean showSmoothWaterLighting = false;
-	public static boolean showSneakEyeHeight = false;
-	public static boolean showSnowDripParticles = false;
-	public static boolean showSpectatorTeamMenu = true;
-	public static boolean showWorldBobbing = true;
-	public static boolean showWorldFog = true;
-	public static boolean smootherPistons = false;
-	public static boolean smoothItemMovement = false;
-	public static boolean sortEnchantmentTooltip = false;
-	public static boolean stackedEntities = false;
-	public static boolean stepAssist = false;
-	public static boolean waterModifiesFoV = true;
-	public static boolean weirdShift2Shift6LinuxBug = false;
-	public static boolean worldEditCompass = false;
-	public static boolean zzzSlightlyBetterItemStitchingMaybeKindaNotReally = false;
+@Config(modid = Reference.MODID, category = "")
+public final class Configuration {
+	public static final General general = new General();
+	public static final Visuals visuals = new Visuals();
+	public static final Rendering rendering = new Rendering();
+	public static final Player player = new Player();
+	public static final Building building = new Building();
+	public static final Ui ui = new Ui();
+	public static final Network network = new Network();
+	public static final Fixes fixes = new Fixes();
 
-	// Ints
-	@Config.RangeInt(min = 0)
-	public static int _speedyPlace = 4;
-	@Config.RangeInt(min = 0)
-	public static int reconnectTimer = 10;
+	private Configuration() {
+	}
 
-	// Sliders
-	@Config.SlidingOption
-	@Config.RangeDouble(min = 0D, max = 3D)
-	public static double blockBreakingMultiplier = 1D;
-	@Config.SlidingOption
-	@Config.RangeDouble(min = 0D, max = 1D)
-	public static double spectatorMaxSpeed = 0.2;
+	public static final class General {
+		@Config.RequiresMcRestart
+		@Config.Comment("Generate a keybind for each toggle on the next launch.")
+		public boolean autoGenerateKeybinds = false;
+		public boolean singleplayerCheats = false;
+	}
+
+	public static final class Visuals {
+		@Config.Comment("Show daytime on the client without changing server time.")
+		public boolean forceDaytime = false;
+		public boolean colorfulFireworkTrails = false;
+		@Config.Comment("Tilt chickens and endermen for the derpy visual effect.")
+		public boolean tiltedMobs = false;
+		public boolean showArmor = true;
+		@Config.RequiresMcRestart
+		public boolean showBarrierBlocks = false;
+		public boolean showBlockBreakingParticles = true;
+		public boolean showBlockSelectorUnderwater = false;
+		public boolean showCenteredPlants = false;
+		public boolean showClearLava = false;
+		public boolean showDamageTilt = false;
+		public boolean showDeathAnimations = true;
+		public boolean showDeathParticles = true;
+		public boolean showGuiBackground = true;
+		public boolean showHand = true;
+		public boolean showHandChangeAnimation = true;
+		public boolean showIdealToolMarker = false;
+		@Config.Comment("Draw the item frame border around displayed items.")
+		public boolean showItemFrameBorder = true;
+		public boolean showMoreEndPortalFaces = false;
+		public boolean showPotionShift = true;
+		public boolean showRain = true;
+		public boolean showRainbowLeaves = false;
+		public boolean showRandomTextures = true;
+		public boolean showShulkerContents = false;
+		public boolean smoothWaterLighting = false;
+		public boolean showSneakEyeHeight = false;
+		public boolean showSnowDripParticles = false;
+		public boolean showSpectatorTeamMenu = true;
+		public boolean showWorldBobbing = true;
+		public boolean showWorldFog = true;
+		public boolean waterAffectsFov = true;
+		@Config.SlidingOption
+		@Config.RangeDouble(min = 0D, max = 3D)
+		public double blockBreakParticleScale = 1D;
+		public boolean stackedEntityCounts = false;
+	}
+
+	public static final class Rendering {
+		@Config.Comment("Render tile entities regardless of distance.")
+		public boolean renderAllTileEntities = false;
+		@Config.RequiresMcRestart
+		@Config.Comment("Render chests as block models instead of tile entities.")
+		public boolean renderChestsWithBlockModels = false;
+		public boolean lightUpdates = true;
+		@Config.Comment("Skip item frames outside the camera view.")
+		public boolean cullHiddenItemFrames = false;
+		@Config.Comment("Skip cave mood sounds and their light checks.")
+		public boolean disableCaveAmbience = false;
+	}
+
+	public static final class Player {
+		@Config.Comment("Update non-player entities on the client.")
+		public boolean updateClientEntities = true;
+		@Config.Comment("Shift+Ctrl-click a recipe to craft all available items.")
+		public boolean quickCraftAll = true;
+		@Config.Comment("Shift+Space cancels elytra flight.")
+		public boolean cancelElytraFlight = false;
+		@Config.Comment("Stop horizontal drift when releasing flight controls.")
+		public boolean cancelFlightInertia = false;
+		public boolean jumpBoostStepAssist = false;
+		public boolean lockYaw = false;
+		public boolean noClip = false;
+		public boolean noFall = false;
+		public boolean respawnOnDeath = false;
+		@Config.Comment("Block firework use while its cooldown is active.")
+		public boolean enforceRocketCooldown = false;
+		@Config.SlidingOption
+		@Config.RangeDouble(min = 0D, max = 1D)
+		public double spectatorFlightSpeed = 0.2;
+		public boolean stepAssist = false;
+		public boolean smoothItemMovement = false;
+	}
+
+	public static final class Building {
+		public boolean pickBlockMaxStack = false;
+		@Config.Comment("Reset the post-break delay immediately.")
+		public boolean noBlockBreakDelay = false;
+		public boolean extendedCreativeHotbar = false;
+		public boolean ignoreAirHotbarSnapshots = false;
+		@Config.Comment("Skip the double-retraction animation on the client.")
+		public boolean instantPistonDoubleRetraction = false;
+		@Config.Comment("Show piston movement order and counts.")
+		public boolean showPistonOrder = false;
+		@Config.Comment("Smooth piston movement on the client.")
+		public boolean smoothPistons = false;
+		public boolean worldEditCompass = false;
+		@Config.RangeInt(min = 0)
+		@Config.Comment("Ticks between right-click actions.")
+		public int rightClickDelayTicks = 4;
+	}
+
+	public static final class Ui {
+		@Config.Comment("Show server ping in the server list.")
+		public boolean showPing = false;
+		@Config.Comment("Shift-click a chat line to copy it.")
+		public boolean copyChatOnClick = false;
+		@Config.Comment("Print death coordinates to chat.")
+		public boolean showDeathLocation = false;
+		public boolean hideRealmsButton = false;
+		public boolean extendedChat = false;
+		@Config.RangeInt(min = 0)
+		@Config.Comment("Seconds before automatically reconnecting.")
+		public int reconnectDelaySeconds = 10;
+		public boolean showItemAttributes = true;
+		@Config.Comment("Show only the first boss bar.")
+		public boolean showSingleBossBar = false;
+		@Config.Comment("Show the scoreboard sidebar.")
+		public boolean showScoreboard = true;
+		public boolean showServerNames = true;
+		public boolean sortEnchantments = false;
+	}
+
+	public static final class Network {
+		@Config.Comment("Send Carpet-compatible placement rotations.")
+		public boolean carpetAccuratePlacement = false;
+		@Config.Comment("Refresh pings for visible servers every 15 seconds.")
+		public boolean refreshServerListPings = false;
+		@Config.Comment("Ignore incoming block-action events.")
+		public boolean ignoreBlockEvents = false;
+	}
+
+	public static final class Fixes {
+		public boolean fixElytraDeploy = false;
+		public boolean fixPistonBreakParticles = false;
+		public boolean fixObserverFire = false;
+		public boolean fixMiningGhostBlocks = false;
+		public boolean fixLinuxShiftNumberKeys = false;
+		public boolean fixItemStitchingSeams = false;
+	}
 }

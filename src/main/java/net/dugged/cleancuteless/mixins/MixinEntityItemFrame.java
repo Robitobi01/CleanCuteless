@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinEntityItemFrame {
 	@Inject(method = {"getWidthPixels", "getHeightPixels"}, at = @At("HEAD"), cancellable = true)
 	private void adjustHitBox(final CallbackInfoReturnable<Integer> cir) {
-		if (!Configuration.showItemFrameFrame) {
+		if (!Configuration.visuals.showItemFrameBorder) {
 			cir.setReturnValue(5);
 		}
 	}

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinTileEntityEndPortal extends TileEntity {
 	@Inject(method = "shouldRenderFace", at = @At("HEAD"), cancellable = true)
 	private void cleancleancuteless$renderMoreEndPortalFaces(final EnumFacing face, final CallbackInfoReturnable<Boolean> cir) {
-		if (Configuration.showMoreEndPortalFaces) {
+		if (Configuration.visuals.showMoreEndPortalFaces) {
 			final var state = this.world.getBlockState(this.getPos().offset(face));
 			cir.setReturnValue(!state.isOpaqueCube() && state.getBlock() != Blocks.END_PORTAL);
 		}

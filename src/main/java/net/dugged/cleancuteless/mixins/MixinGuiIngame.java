@@ -77,7 +77,7 @@ public abstract class MixinGuiIngame extends Gui {
 	@Inject(method = "renderHotbar", at = @At("RETURN"))
 	public void renderCompassMenu(ScaledResolution scaledResolution, float partialTicks, CallbackInfo ci) {
 		final Minecraft mc = Minecraft.getMinecraft();
-		if (Configuration.worldEditCompass && mc.player.isCreative() && mc.player.getHeldItemMainhand().getItem() instanceof ItemCompass) {
+		if (Configuration.building.worldEditCompass && mc.player.isCreative() && mc.player.getHeldItemMainhand().getItem() instanceof ItemCompass) {
 			CleanCuteless.guiCompass.renderTooltip(scaledResolution);
 			CleanCuteless.guiCompass.renderSelectedItem(scaledResolution);
 		} else if (CleanCuteless.guiCompass.isMenuActive()) {
@@ -87,7 +87,7 @@ public abstract class MixinGuiIngame extends Gui {
 
 	@Redirect(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawTexturedModalRect(IIIIII)V", ordinal = 1))
 	private void modifySelectedItem(GuiIngame instance, int x, int y, int textureX, int textureY, int width, int height) {
-		if (Configuration.extendedCreativeHotbar && mc.player.isCreative()) {
+		if (Configuration.building.extendedCreativeHotbar && mc.player.isCreative()) {
 			EntityPlayer player = (EntityPlayer) mc.getRenderViewEntity();
 			int slot = CleanCuteless.hotbarSlot;
 			x -= player.inventory.currentItem * 20;
@@ -106,7 +106,7 @@ public abstract class MixinGuiIngame extends Gui {
 
 //	@Redirect(method = "renderAttackIndicator", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawTexturedModalRect(IIIIII)V"))
 //	private void shiftAttackIndicator(GuiIngame instance, int x, int y, int textureX, int textureY, int width, int height) {
-//		if (Configuration.extendedCreativeHotbar && mc.player.isCreative() && mc.player.getPrimaryHand().opposite() == EnumHandSide.LEFT) {
+//		if (Configuration.building.extendedCreativeHotbar && mc.player.isCreative() && mc.player.getPrimaryHand().opposite() == EnumHandSide.LEFT) {
 //			x += 182;
 //		}
 //		drawTexturedModalRect(x, y, textureX, textureY, width, height);
@@ -114,7 +114,7 @@ public abstract class MixinGuiIngame extends Gui {
 
 	@Inject(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawTexturedModalRect(IIIIII)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void alterTexture(ScaledResolution sr, float l, CallbackInfo ci, EntityPlayer player, ItemStack itemStack, EnumHandSide handSide, int i, float f, int j, int k) {
-		if (Configuration.extendedCreativeHotbar && player.isCreative()) {
+		if (Configuration.building.extendedCreativeHotbar && player.isCreative()) {
 			mc.getTextureManager().bindTexture(EXTENDED_HOTBAR_PATH);
 			if (handSide == EnumHandSide.LEFT) {
 				this.drawTexturedModalRect(i + 91, sr.getScaledHeight() - 22, 0, 0, 81, 22);
@@ -127,7 +127,7 @@ public abstract class MixinGuiIngame extends Gui {
 
 	@Inject(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderHelper;enableGUIStandardItemLighting()V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void modifyHotbar(ScaledResolution sr, float partialTicks, CallbackInfo ci, EntityPlayer player, ItemStack itemStack, EnumHandSide handSide, int i, float f, int j, int k) {
-		if (Configuration.extendedCreativeHotbar && player.isCreative()) {
+		if (Configuration.building.extendedCreativeHotbar && player.isCreative()) {
 			for (int slot = 0; slot < 4; ++slot) {
 				int i1;
 				int j1 = sr.getScaledHeight() - 16 - 3;

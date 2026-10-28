@@ -15,7 +15,7 @@ public abstract class MixinMouseHelper {
 
 	@Inject(method = "mouseXYChange", at = @At("RETURN"))
 	private void cleancleancuteless$lockMouse(final CallbackInfo ci) {
-		if (Configuration.lockYaw) {
+		if (Configuration.player.lockYaw) {
 			this.deltaX = 0;
 		}
 	}

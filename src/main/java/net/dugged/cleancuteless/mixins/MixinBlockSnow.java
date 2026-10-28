@@ -22,7 +22,7 @@ public abstract class MixinBlockSnow extends Block {
 
 	@Override
 	public BlockRenderLayer getRenderLayer() {
-		if (Configuration.showSnowDripParticles) {
+		if (Configuration.visuals.showSnowDripParticles) {
 			return BlockRenderLayer.TRANSLUCENT;
 		} else  {
 			return BlockRenderLayer.SOLID;
@@ -31,7 +31,7 @@ public abstract class MixinBlockSnow extends Block {
 
 	@Override
 	public void randomDisplayTick(final IBlockState state, final World world, final BlockPos pos, final Random rand) {
-		if (!Configuration.showSnowDripParticles) {
+		if (!Configuration.visuals.showSnowDripParticles) {
 			return;
 		}
 

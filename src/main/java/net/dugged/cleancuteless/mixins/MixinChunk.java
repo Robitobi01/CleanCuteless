@@ -18,7 +18,7 @@ public abstract class MixinChunk {
 
 	@Inject(method = "relightBlock", at = @At("HEAD"), cancellable = true)
 	private void noLightLagEverPlz(final int x, final int y, final int z, final CallbackInfo ci) {
-		if (!Configuration.lightUpdates && this.world.isRemote) {
+		if (!Configuration.rendering.lightUpdates && this.world.isRemote) {
 			ci.cancel();
 		}
 	}

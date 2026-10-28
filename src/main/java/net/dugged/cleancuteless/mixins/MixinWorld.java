@@ -23,7 +23,7 @@ public abstract class MixinWorld {
 
 	@Inject(method = "checkLightFor", at = @At("HEAD"), cancellable = true)
 	private void cleancleancuteless$onLight(final CallbackInfoReturnable<Boolean> cir) {
-		if (!Configuration.lightUpdates && this.isRemote) {
+		if (!Configuration.rendering.lightUpdates && this.isRemote) {
 			cir.setReturnValue(false);
 		}
 	}

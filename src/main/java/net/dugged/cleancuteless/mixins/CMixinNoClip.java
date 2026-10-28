@@ -33,12 +33,12 @@ public abstract class CMixinNoClip {
 
 		@Redirect(method = "onUpdate()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;isSpectator()Z"))
 		private boolean updateNoClipping(final EntityPlayer player) {
-			return player.isSpectator() || (Configuration.noClip && player.isCreative() && player.capabilities.isFlying);
+			return player.isSpectator() || (Configuration.player.noClip && player.isCreative() && player.capabilities.isFlying);
 		}
 
 		@Override
 		public void move(final MoverType type, final double x, final double y, final double z) {
-			if (type == MoverType.SELF || !(Configuration.noClip && this.isCreative() && this.capabilities.isFlying)) {
+			if (type == MoverType.SELF || !(Configuration.player.noClip && this.isCreative() && this.capabilities.isFlying)) {
 				super.move(type, x, y, z);
 			}
 		}
@@ -56,7 +56,7 @@ public abstract class CMixinNoClip {
 	public abstract static class MixinWorld {
 		@ModifyVariable(method = "mayPlace", at = @At("HEAD"), argsOnly = true)
 		private boolean ignoreEntityWhenPlacing(final boolean skipCollisionCheck, final Block block, final BlockPos pos, final boolean skip, final EnumFacing side, final Entity placer) {
-			return Configuration.noClip && placer instanceof EntityPlayer && ((EntityPlayer) placer).isCreative() || skipCollisionCheck;
+			return Configuration.player.noClip && placer instanceof EntityPlayer && ((EntityPlayer) placer).isCreative() || skipCollisionCheck;
 		}
 	}
 }

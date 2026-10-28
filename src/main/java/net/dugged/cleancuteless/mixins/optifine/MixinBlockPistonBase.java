@@ -16,14 +16,14 @@ public abstract class MixinBlockPistonBase {
 	@Inject(method = "eventReceived", at = @At("HEAD"))
 	private void fixOptifineBlinkStart(final IBlockState state, final World world, final BlockPos pos, final int retracting, final int meta, final CallbackInfoReturnable<Boolean> cir) {
 		// Semi works
-		if (Configuration.smootherPistons) {
+		if (Configuration.building.smoothPistons) {
 			((IPlayerControllerOF) Minecraft.getMinecraft().playerController).setActing(true);
 		}
 	}
 
 	@Inject(method = "eventReceived", at = @At("RETURN"))
 	private void fixOptifineBlinkStop(final IBlockState state, final World world, final BlockPos pos, final int retracting, final int meta, final CallbackInfoReturnable<Boolean> cir) {
-		if (Configuration.smootherPistons) {
+		if (Configuration.building.smoothPistons) {
 			((IPlayerControllerOF) Minecraft.getMinecraft().playerController).setActing(false);
 		}
 	}

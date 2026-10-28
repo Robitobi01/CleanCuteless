@@ -35,7 +35,7 @@ public abstract class MixinPlayerControllerMP {
 
 	@Inject(method = "clickBlock", at = @At(value = "INVOKE", target = cleancutelessOnInstantMine, shift = At.Shift.AFTER))
 	private void postInstantMine(BlockPos pos, EnumFacing face, CallbackInfoReturnable<Boolean> cir) {
-		if (Configuration.miningGhostBlockFix && this.cleancutelessBlockHardness > 0F) {
+		if (Configuration.fixes.fixMiningGhostBlocks && this.cleancutelessBlockHardness > 0F) {
 			final NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
 			if (connection != null) {
 				connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, face, EnumHand.MAIN_HAND, 0F, 0F, 0F));
@@ -45,13 +45,13 @@ public abstract class MixinPlayerControllerMP {
 
 	@Inject(method = "processRightClick", at = @At(value = "HEAD"), cancellable = true)
 	private void onRightClick(EntityPlayer player, World worldIn, EnumHand hand, CallbackInfoReturnable<EnumActionResult> cir) {
-		if (!player.isSpectator() && Configuration.rocketCooldown && player.getHeldItem(hand).getItem() instanceof ItemFirework && player.getCooldownTracker().hasCooldown(player.getHeldItem(hand).getItem())) {
+		if (!player.isSpectator() && Configuration.player.enforceRocketCooldown && player.getHeldItem(hand).getItem() instanceof ItemFirework && player.getCooldownTracker().hasCooldown(player.getHeldItem(hand).getItem())) {
 			cir.cancel();
 		}
 	}
 
 	@ModifyConstant(method = "onPlayerDamageBlock", constant = @Constant(intValue = 5))
 	private int postBlockMine(int blockHitDelay) {
-		return Configuration.clickBlockMining ? 0 : 5;
+		return Configuration.building.noBlockBreakDelay ? 0 : 5;
 	}
 }

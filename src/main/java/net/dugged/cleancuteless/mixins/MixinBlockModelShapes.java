@@ -14,11 +14,11 @@ import java.util.stream.IntStream;
 public abstract class MixinBlockModelShapes {
 	@ModifyVariable(method = "registerBuiltInBlocks", at = @At("HEAD"), argsOnly = true)
 	private Block[] removeSpecialChestRenderer(final Block[] blocks) {
-		if (Configuration.chestWithoutTESR) {
+		if (Configuration.rendering.renderChestsWithBlockModels) {
 			IntStream.range(0, blocks.length).filter(i -> blocks[i] == Blocks.CHEST || blocks[i] == Blocks.TRAPPED_CHEST).forEach(i -> blocks[i] = Blocks.AIR);
 		}
 
-		if (Configuration.showBarrierBlocks) {
+		if (Configuration.visuals.showBarrierBlocks) {
 			IntStream.range(0, blocks.length).filter(i -> blocks[i] == Blocks.BARRIER).forEach(i -> blocks[i] = Blocks.AIR);
 		}
 

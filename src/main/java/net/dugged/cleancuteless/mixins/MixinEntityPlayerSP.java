@@ -49,21 +49,21 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
 	// By Earthcomputer.
 	@Inject(method = "onLivingUpdate", at = @At(value = "FIELD", target = "Lnet/minecraft/network/play/client/CPacketEntityAction$Action;START_FALL_FLYING:Lnet/minecraft/network/play/client/CPacketEntityAction$Action;"))
 	public void onDeployElytra(final CallbackInfo ci) {
-		if (Configuration.elytraFix) {
+		if (Configuration.fixes.fixElytraDeploy) {
 			this.setFlag(7, true);
 		}
 	}
 
 	@Inject(method = "onLivingUpdate", at = @At("HEAD"))
 	private void enableElytraCancelation(final CallbackInfo ci) {
-		if (Configuration.elytraCancellation && this.getFlag(7) && GuiScreen.isShiftKeyDown() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+		if (Configuration.player.cancelElytraFlight && this.getFlag(7) && GuiScreen.isShiftKeyDown() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			this.setFlag(7, false);
 		}
 	}
 
 	@Override
 	public void setVelocity(final double x, final double y, final double z) {
-		if (Configuration.showDamageTilt) {
+		if (Configuration.visuals.showDamageTilt) {
 			final float result = (float) (-MathHelper.atan2(this.motionZ - z, this.motionX - x) * (180D / Math.PI) - this.rotationYaw);
 			if (Float.isFinite(result)) {
 				this.attackedAtYaw = result;

@@ -9,11 +9,11 @@ public class StepAssistHelper {
 	}
 
 	private float getStepAmount(final EntityPlayer player) {
-		if (Configuration.stepAssist) {
+		if (Configuration.player.stepAssist) {
 			return player.isSneaking() ? 0.9F : 1.5F;
 		}
 
-		if (!Configuration.jumpBoostStepAssist || !player.isPotionActive(MobEffects.JUMP_BOOST)) {
+		if (!Configuration.player.jumpBoostStepAssist || !player.isPotionActive(MobEffects.JUMP_BOOST)) {
 			return 0.6F;
 		}
 

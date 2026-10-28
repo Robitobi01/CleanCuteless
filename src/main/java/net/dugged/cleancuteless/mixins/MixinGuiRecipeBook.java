@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinGuiRecipeBook {
 	@Inject(method = "updateStackedContents", at = @At("RETURN"))
 	private void craftingHax(CallbackInfo ci) {
-		if (!Configuration.craftingHax) {
+		if (!Configuration.player.quickCraftAll) {
 			return;
 		}
 

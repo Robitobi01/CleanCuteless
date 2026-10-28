@@ -25,7 +25,7 @@ public abstract class MixinItemFlintAndSteel extends Item {
 	@Inject(method = "onItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z"))
 	private void rightClickRocket(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, CallbackInfoReturnable<EnumActionResult> cir) {
 		IBlockState blockStateDown = worldIn.getBlockState(pos.down());
-		if (Configuration.improveObserverFire && player.isCreative() && blockStateDown.getBlock() instanceof BlockObserver) {
+		if (Configuration.fixes.fixObserverFire && player.isCreative() && blockStateDown.getBlock() instanceof BlockObserver) {
 			if (blockStateDown.getProperties().containsKey((BlockDirectional.FACING)) && blockStateDown.getValue(BlockDirectional.FACING) == EnumFacing.UP) {
 				final NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
 				if (connection != null) {

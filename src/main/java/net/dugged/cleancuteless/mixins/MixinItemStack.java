@@ -41,13 +41,13 @@ public abstract class MixinItemStack {
 
 	@Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;isEmpty()Z", remap = false))
 	private boolean noAttributes(final Multimap<String, AttributeModifier> map) {
-		return !Configuration.showItemAttributes || map.isEmpty() || !Minecraft.getMinecraft().gameSettings.advancedItemTooltips;
+		return !Configuration.ui.showItemAttributes || map.isEmpty() || !Minecraft.getMinecraft().gameSettings.advancedItemTooltips;
 	}
 
 	@Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getEnchantmentTagList()Lnet/minecraft/nbt/NBTTagList;"))
 	private NBTTagList sortEnchantments(final ItemStack item) {
 		final NBTTagList list = this.getEnchantmentTagList();
-		if (Configuration.sortEnchantmentTooltip) {
+		if (Configuration.ui.sortEnchantments) {
 			((INBTTagList) list).getTagList().sort(cleancleancuteless$cmp);
 		}
 

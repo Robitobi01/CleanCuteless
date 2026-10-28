@@ -29,11 +29,11 @@ public abstract class MixinNetHandlerPlayClient {
 
 	@Inject(method = "handleCombatEvent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/client/gui/GuiScreen;)V"))
 	private void sendDeathLocation(SPacketCombatEvent packetIn, CallbackInfo ci) {
-		if (Configuration.respawnOnDeath) {
+		if (Configuration.player.respawnOnDeath) {
 			Minecraft.getMinecraft().player.respawnPlayer();
 		}
 
-		if (Configuration.deathLocation) {
+		if (Configuration.ui.showDeathLocation) {
 			final Minecraft mc = Minecraft.getMinecraft();
 			final BlockPos pos = mc.player.getPosition();
 			final String formatted = String.format("You died @ %d %d %d", pos.getX(), pos.getY(), pos.getZ());
@@ -46,7 +46,7 @@ public abstract class MixinNetHandlerPlayClient {
 	@Redirect(method = "handleTimeUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/server/SPacketTimeUpdate;getWorldTime()J"))
 	private long alwaysDay(SPacketTimeUpdate packet) {
 		final long time = packet.getWorldTime();
-		if (Configuration.alwaysDay) {
+		if (Configuration.visuals.forceDaytime) {
 			return time >= 0 ? -(time - time % 24000L + 6000L) : time;
 		}
 
@@ -98,7 +98,7 @@ public abstract class MixinNetHandlerPlayClient {
 
 	@Inject(method = "handleBlockAction", at = @At(value = "INVOKE", target = START_OF_PACKET), cancellable = true)
 	private void onHandleBlockAction(final SPacketBlockAction packet, final CallbackInfo ci) {
-		if (Configuration.ignoreBlockEvents) {
+		if (Configuration.network.ignoreBlockEvents) {
 			ci.cancel();
 		}
 	}

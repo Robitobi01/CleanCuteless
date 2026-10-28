@@ -58,7 +58,7 @@ public abstract class MixinTileEntityEndPortalRenderer extends TileEntitySpecial
 	@Inject(method = "render(Lnet/minecraft/tileentity/TileEntityEndPortal;DDDFIF)V", at = @At("HEAD"), cancellable = true)
 	public void cleancleancuteless$render(final TileEntityEndPortal te, final double x, final double y, final double z, final float partialTicks, final int destroyStage, final float alpha, final CallbackInfo ci) {
 		//noinspection ConstantValue
-		if (!Configuration.showMoreEndPortalFaces || (TileEntityEndPortalRenderer) (Object) this instanceof TileEntityEndGatewayRenderer) {
+		if (!Configuration.visuals.showMoreEndPortalFaces || (TileEntityEndPortalRenderer) (Object) this instanceof TileEntityEndGatewayRenderer) {
 			return;
 		}
 		

@@ -49,17 +49,17 @@ public abstract class MixinMinecraft implements IThreadListener, ISnooperInfo {
 
 	@Inject(method = "rightClickMouse", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;rightClickDelayTimer:I", opcode = Opcodes.PUTFIELD, ordinal = 0, shift = At.Shift.AFTER))
 	private void onRightClick(CallbackInfo ci) {
-		this.rightClickDelayTimer = Configuration._speedyPlace;
+		this.rightClickDelayTimer = Configuration.building.rightClickDelayTicks;
 	}
 
 	@ModifyArg(method = "runTickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F"), index = 2)
 	private float allowFasterSpectatorFlight(float value) {
-		return (float) Configuration.spectatorMaxSpeed;
+		return (float) Configuration.player.spectatorFlightSpeed;
 	}
 
 	@Inject(method = "middleClickMouse", at = @At("RETURN"))
 	private void onMiddleClickMouse(final CallbackInfo ci) {
-		if (Configuration.alwaysPickBlockMaxStack && this.player.isCreative() && this.objectMouseOver != null && this.objectMouseOver.typeOfHit != RayTraceResult.Type.MISS) {
+		if (Configuration.building.pickBlockMaxStack && this.player.isCreative() && this.objectMouseOver != null && this.objectMouseOver.typeOfHit != RayTraceResult.Type.MISS) {
 			final InventoryPlayer inv = this.player.inventory;
 			final ItemStack currentItem = inv.getCurrentItem();
 			currentItem.setCount(currentItem.getMaxStackSize());

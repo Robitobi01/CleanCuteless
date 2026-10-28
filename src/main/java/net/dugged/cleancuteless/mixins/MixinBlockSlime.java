@@ -23,7 +23,7 @@ public abstract class MixinBlockSlime extends BlockBreakable {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!Configuration.showPistonOrder) return false;
+		if (!Configuration.building.showPistonOrder) return false;
 		boolean flag = playerIn.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.AIR;
 		if (worldIn.isRemote && flag) {
 			pos = pos.offset(facing);

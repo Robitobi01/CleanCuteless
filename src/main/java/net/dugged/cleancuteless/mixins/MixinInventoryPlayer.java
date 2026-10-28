@@ -33,7 +33,7 @@ public class MixinInventoryPlayer {
 
 	@Inject(method = "changeCurrentItem", at = @At("RETURN"))
 	public void trackCurrentSlot(int direction, CallbackInfo ci) {
-		if (Configuration.extendedCreativeHotbar && player.isCreative()) {
+		if (Configuration.building.extendedCreativeHotbar && player.isCreative()) {
 			Minecraft mc = Minecraft.getMinecraft();
 			if (direction > 0) {
 				direction = 1;

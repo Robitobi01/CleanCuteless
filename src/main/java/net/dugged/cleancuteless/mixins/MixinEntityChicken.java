@@ -17,7 +17,7 @@ public abstract class MixinEntityChicken extends EntityAnimal {
 
 	@Inject(method = "onLivingUpdate", at = @At("RETURN"))
 	private void derpyChicken(final CallbackInfo ci) {
-		if (Configuration.derpyChicken) {
+		if (Configuration.visuals.tiltedMobs) {
 			this.rotationPitch = -90F;
 		}
 	}

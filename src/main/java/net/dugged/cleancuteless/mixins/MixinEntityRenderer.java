@@ -50,7 +50,7 @@ public abstract class MixinEntityRenderer {
 
 	@Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
 	private void hideHand(final float partialTicks, final int pass, final CallbackInfo ci) {
-		if (!Configuration.showHand) {
+		if (!Configuration.visuals.showHand) {
 			ci.cancel();
 		}
 	}
@@ -65,7 +65,7 @@ public abstract class MixinEntityRenderer {
 	@SuppressWarnings("ConstantConditions")
 	@Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V", ordinal = 4))
 	private void eyeHeightTranslate(final float x, float y, final float z, final float partialTicks) {
-		if (Configuration.showSneakEyeHeight && !Minecraft.getMinecraft().playerController.isSpectator()) {
+		if (Configuration.visuals.showSneakEyeHeight && !Minecraft.getMinecraft().playerController.isSpectator()) {
 			y += Minecraft.getMinecraft().getRenderViewEntity().getEyeHeight() - this.cleancutelessLastEyeHeight - partialTicks * (this.cleancutelessEyeHeight - this.cleancutelessLastEyeHeight);
 		}
 
@@ -74,17 +74,17 @@ public abstract class MixinEntityRenderer {
 
 	@Redirect(method = "getFOVModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/state/IBlockState;getMaterial()Lnet/minecraft/block/material/Material;"))
 	private Material staticWaterFov(final IBlockState state) {
-		return Configuration.waterModifiesFoV ? state.getMaterial() : Material.AIR;
+		return Configuration.visuals.waterAffectsFov ? state.getMaterial() : Material.AIR;
 	}
 
 	@Redirect(method = "setupCameraTransform", at = @At(value = "FIELD", target = "Lnet/minecraft/client/settings/GameSettings;viewBobbing:Z", opcode = Opcodes.GETFIELD))
 	private boolean cleancleancuteless$doNotBobWorld(GameSettings instance) {
-		return Configuration.showWorldBobbing && instance.viewBobbing;
+		return Configuration.visuals.showWorldBobbing && instance.viewBobbing;
 	}
 
 	@Redirect(method = "renderWorldPass", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isInsideOfMaterial(Lnet/minecraft/block/material/Material;)Z"))
 	private boolean renderBlockSelectorUnderwater(final Entity entity, final Material material) {
-		return !Configuration.showBlockSelectorUnderwater && entity.isInsideOfMaterial(material);
+		return !Configuration.visuals.showBlockSelectorUnderwater && entity.isInsideOfMaterial(material);
 	}
 
 	@Redirect(method = "getMouseOver", at = @At(value = "FIELD", target = "Lnet/minecraft/util/EntitySelectors;NOT_SPECTATING:Lcom/google/common/base/Predicate;"))
@@ -94,7 +94,7 @@ public abstract class MixinEntityRenderer {
 
 	@Inject(method = "setupCameraTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;matrixMode(I)V", ordinal = 0))
 	private void cleancleancuteless$increaseFarPlane(final float partialTicks, final int pass, final CallbackInfo ci) {
-		if (!Configuration.showWorldFog) {
+		if (!Configuration.visuals.showWorldFog) {
 			this.farPlaneDistance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 512;
 		}
 	}

@@ -37,7 +37,7 @@ public abstract class MixinRenderGlobal {
 
 	@Inject(method = "notifyLightSet", at = @At("HEAD"), cancellable = true)
 	private void noLight(BlockPos pos, CallbackInfo ci) {
-		if (!Configuration.lightUpdates) {
+		if (!Configuration.rendering.lightUpdates) {
 			ci.cancel();
 		}
 	}
@@ -57,7 +57,7 @@ public abstract class MixinRenderGlobal {
 
 	@Redirect(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderManager;shouldRender(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;DDD)Z"))
 	private boolean renderStackedEntities(RenderManager renderManager, Entity entityIn, ICamera camera, double camX, double camY, double camZ) {
-		if (Configuration.stackedEntities && !entityIn.isDead) {
+		if (Configuration.visuals.stackedEntityCounts && !entityIn.isDead) {
 			BlockPos pos = entityIn.getPosition();
 			if (entityMap.containsKey(pos)) {
 				counterMap.put(pos, counterMap.get(pos) + 1);
@@ -74,7 +74,7 @@ public abstract class MixinRenderGlobal {
 
 	@Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;isRenderEntityOutlines()Z", shift = At.Shift.BEFORE))
 	private void renderCounts(Entity renderViewEntity, ICamera camera, float partialTicks, CallbackInfo ci) {
-		if (Configuration.stackedEntities) {
+		if (Configuration.visuals.stackedEntityCounts) {
 			for (BlockPos pos : entityMap.keySet()) {
 				Entity entity = entityMap.get(pos);
 				int count = counterMap.get(pos);

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinRenderManager {
 	@Inject(method = "renderEntityStatic", at = @At("HEAD"), cancellable = true)
 	private void hideDeathAnimation(Entity entity, float f, boolean z, CallbackInfo ci) {
-		if (Configuration.showDeathAnimations || !(entity instanceof EntityLivingBase)) {
+		if (Configuration.visuals.showDeathAnimations || !(entity instanceof EntityLivingBase)) {
 			return;
 		}
 

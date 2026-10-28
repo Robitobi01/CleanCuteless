@@ -58,7 +58,7 @@ public abstract class MixinBlockChest extends BlockContainer {
 
 	@Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
 	private void onGetRenderType(final IBlockState state, final CallbackInfoReturnable<EnumBlockRenderType> cir) {
-		if (Configuration.chestWithoutTESR) {
+		if (Configuration.rendering.renderChestsWithBlockModels) {
 			cir.setReturnValue(EnumBlockRenderType.MODEL);
 		}
 	}

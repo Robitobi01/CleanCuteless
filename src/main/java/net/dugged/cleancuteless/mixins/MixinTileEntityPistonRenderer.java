@@ -17,7 +17,7 @@ public abstract class MixinTileEntityPistonRenderer {
 	//TODO: Fix piston Z-fighting
 	@Redirect(method = "render(Lnet/minecraft/tileentity/TileEntityPiston;DDDFIF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;disableCull()V"))
 	private void cullMovingBlocks(final TileEntityPiston te, final double x, final double y, final double z, final float partialTicks, final int destroyStage, final float alpha) {
-		if (Configuration.smootherPistons) {
+		if (Configuration.building.smoothPistons) {
 			GlStateManager.enableCull();
 			GlStateManager.enablePolygonOffset();
 			GlStateManager.doPolygonOffset(-te.getFacing().getIndex() * 0.01F, 0.01F);
@@ -28,7 +28,7 @@ public abstract class MixinTileEntityPistonRenderer {
 
 	@Inject(method = "render(Lnet/minecraft/tileentity/TileEntityPiston;DDDFIF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderHelper;enableStandardItemLighting()V"))
 	private void uncullMovingBlocks(CallbackInfo ci) {
-		if (Configuration.smootherPistons) {
+		if (Configuration.building.smoothPistons) {
 			GlStateManager.disableCull();
 			GlStateManager.disablePolygonOffset();
 		}

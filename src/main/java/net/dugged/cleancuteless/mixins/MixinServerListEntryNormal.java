@@ -28,12 +28,12 @@ public abstract class MixinServerListEntryNormal {
 
 	@Redirect(method = "drawEntry", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I", ordinal = 0))
 	private int hideServerNames(final FontRenderer fontRenderer, final String text, final int x, final int y, final int color) {
-		return Configuration.showServerNames ? fontRenderer.drawString(text, x, y, color) : 0;
+		return Configuration.ui.showServerNames ? fontRenderer.drawString(text, x, y, color) : 0;
 	}
 
 	@Inject(method = "drawEntry", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/client/FMLClientHandler;enhanceServerListEntry(Lnet/minecraft/client/gui/ServerListEntryNormal;Lnet/minecraft/client/multiplayer/ServerData;IIIII)Ljava/lang/String;", remap = false))
 	private void alwaysShowPing(final int slotIndex, final int x, final int y, final int listWidth, final int slotHeight, final int mouseX, final int mouseY, final boolean isSelected, final float partialTicks, final CallbackInfo ci) {
-		if (!Configuration.alwaysShowPing || this.server.pingToServer < 0) {
+		if (!Configuration.ui.showPing || this.server.pingToServer < 0) {
 			return;
 		}
 

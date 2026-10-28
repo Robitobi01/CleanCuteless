@@ -17,7 +17,7 @@ public abstract class MixinEntityEnderman extends EntityMob {
 
 	@Inject(method = "onLivingUpdate", at = @At("RETURN"))
 	private void derpyEnderman(final CallbackInfo ci) {
-		if (Configuration.derpyChicken) {
+		if (Configuration.visuals.tiltedMobs) {
 			this.rotationPitch = -180F;
 		}
 	}

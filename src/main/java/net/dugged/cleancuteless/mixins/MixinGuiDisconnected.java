@@ -33,7 +33,7 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
 	@Inject(method = "initGui", at = @At("RETURN"))
 	private void addButton(final CallbackInfo ci) {
 		final int textHeight = this.fontRenderer.listFormattedStringToWidth(this.message.getFormattedText(), this.width - 50).size() * this.fontRenderer.FONT_HEIGHT;
-		countdownSeconds = Configuration.reconnectTimer;
+		countdownSeconds = Configuration.ui.reconnectDelaySeconds;
 		if (CleanCuteless.currentServer != null) {
 			if (this.message.getUnformattedText().toLowerCase().contains("stopjoin")) {
 				this.buttonList.add(new GuiButton(1, this.width / 2 - 100, Math.min(this.height / 2 + textHeight / 2 + this.fontRenderer.FONT_HEIGHT, this.height - 30) + 30, I18n.format("Reconnect forbidden")));

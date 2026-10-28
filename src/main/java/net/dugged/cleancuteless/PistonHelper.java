@@ -73,7 +73,7 @@ public class PistonHelper {
 	}
 
 	public static void draw(float partialTicks) {
-		if (Configuration.showPistonOrder && activated) {
+		if (Configuration.building.showPistonOrder && activated) {
 
 			BlockPos pos;
 

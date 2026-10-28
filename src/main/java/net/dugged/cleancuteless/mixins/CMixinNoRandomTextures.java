@@ -11,7 +11,7 @@ public abstract class CMixinNoRandomTextures {
 	public abstract static class MixinWeightedBakedModel {
 		@ModifyVariable(method = "getQuads", at = @At("HEAD"), argsOnly = true)
 		private long cleancleancuteless$noRandomTextures(final long value) {
-			return Configuration.showRandomTextures ? value : 0L;
+			return Configuration.visuals.showRandomTextures ? value : 0L;
 		}
 	}
 }
